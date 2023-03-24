@@ -9,11 +9,11 @@ Community    = alpha
 MOOSTimeWarp = 1
 
 // Forest Lake
-LatOrigin  = 43.825300 
-LongOrigin = -70.330400 
+LatOrigin  = 43.825300
+LongOrigin = -70.330400
 
 // MIT Sailing Pavilion (use this one)
-// LatOrigin  = 42.358456 
+// LatOrigin  = 42.358456
 // LongOrigin = -71.087589
 
 //------------------------------------------
@@ -36,15 +36,15 @@ ProcessConfig = ANTLER
 //------------------------------------------
 // uMemWatch config block
 
-ProcessConfig = uMemWatch                                       
-{                                                               
-  AppTick   = 4                                                 
-  CommsTick = 4                                                 
-                                                                
+ProcessConfig = uMemWatch
+{
+  AppTick   = 4
+  CommsTick = 4
+
   absolute_time_gap = 1   // In Seconds, Default is 4
 
   watch_only = pHelmIvP,pMarineViewer
-}                                  
+}
 
 //------------------------------------------
 // pLogger config block
@@ -185,7 +185,7 @@ ProcessConfig = pMarineViewer
   nodes_font_size      = medium
   procs_font_size      = medium
   appcast_font_size    = small
-  
+
   // datum_viewable = true
   // datum_size     = 18
   // gui_size = small
@@ -235,4 +235,3 @@ ProcessConfig = pNodeReporter
   platform_color  = yellow
   platform_length = 4
 }
-

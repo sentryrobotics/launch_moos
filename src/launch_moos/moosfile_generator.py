@@ -12,11 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from io import StringIO
 import os
 import sys
+from io import StringIO
 
 import em
+
 
 MISSION_FILE_TEMPLATE = """@[for (variable_name, variable_value) in global_variables]@
 @(variable_name) = @(variable_value)
@@ -31,7 +32,7 @@ ProcessConfig = @(process_name)
 """
 
 
-def expand_template(template_name, data, output_file, encoding='utf-8'):
+def expand_template(template_name, data, output_file, encoding="utf-8"):
     content = evaluate_template(template_name, data)
 
     if output_file.exists():
@@ -60,18 +61,19 @@ def evaluate_template(data):
             options={
                 em.BUFFERED_OPT: True,
                 em.RAW_OPT: True,
-            })
+            },
+        )
 
-        _interpreter.invoke(
-            'beforeFile', name="moos_mission_file", locals=data)
+        _interpreter.invoke("beforeFile", name="moos_mission_file", locals=data)
         _interpreter.string(MISSION_FILE_TEMPLATE, "moos_mission_file", locals=data)
-        _interpreter.invoke('afterFile')
+        _interpreter.invoke("afterFile")
 
         return output.getvalue()
     except Exception as e:  # noqa: F841
         print(
             f"{e.__class__.__name__} processing MOOS Mission file template'",
-            file=sys.stderr)
+            file=sys.stderr,
+        )
         raise
     finally:
         _interpreter.shutdown()
@@ -81,15 +83,15 @@ def evaluate_template(data):
 def _evaluate_template(template_name, **kwargs):
     global _interpreter
     template_path = os.path.join(os.path.dirname(__file__), template_name)
-    with open(template_path, 'r') as h:
-        _interpreter.invoke(
-            'beforeInclude', name=template_path, file=h, locals=kwargs)
+    with open(template_path) as h:
+        _interpreter.invoke("beforeInclude", name=template_path, file=h, locals=kwargs)
         content = h.read()
     try:
         _interpreter.string(content, template_path, kwargs)
     except Exception as e:  # noqa: F841
         print(
-            f"{e.__class__.__name__} processing template '{template_name}': "
-            f'{e}', file=sys.stderr)
+            f"{e.__class__.__name__} processing template '{template_name}': " f"{e}",
+            file=sys.stderr,
+        )
         sys.exit(1)
-    _interpreter.invoke('afterInclude')
+    _interpreter.invoke("afterInclude")

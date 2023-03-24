@@ -19,9 +19,12 @@ Changelog = "https://github.com/russkel/launch_moos/releases"
 python = "^3.7"
 click = ">=8.0.1"
 pyparsing = "^3.0.9"
+ament-index-python = {git = "https://github.com/ros2-gbp/ament_index-release.git", rev = "release/rolling/ament_index_python"}
 launch = {git = "https://github.com/ros2-gbp/launch-release.git", rev = "release/rolling/launch"}
 empy = "^3.3.4"
 lark = "^1.1.2"
+pyyaml = "^6.0"
+osrf-pycommon = "^2.0.2"
 
 [tool.poetry.dev-dependencies]
 Pygments = ">=2.10.0"

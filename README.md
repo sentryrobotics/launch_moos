@@ -16,7 +16,7 @@
 - Use ROS2 `launch` tooling to bring up MOOS communities using your existing MOOS files.
 - Convert `.moos` mission files into Python based launch files.
 - Proper logging of `stderr` and `stdout` using `launch` logging.
-- No more antiquated `pAntler`! 
+- No more antiquated `pAntler`!
 
 ## Requirements
 

@@ -10,9 +10,8 @@ from typing import Tuple  # noqa: F401
 from launch.action import Action
 from launch.actions import ExecuteProcess
 from launch.frontend import Entity
-from launch.frontend import expose_action
 from launch.frontend import Parser
-
+from launch.frontend import expose_action
 from launch.launch_context import LaunchContext
 from launch.some_substitutions_type import SomeSubstitutionsType
 from launch.substitutions import LocalSubstitution
@@ -20,19 +19,20 @@ from launch.substitutions import LocalSubstitution
 from ..moosfile_generator import evaluate_template
 
 
-@expose_action('moosapp')
+@expose_action("moosapp")
 class MOOSApp(ExecuteProcess):
     """Action that executes a MOOS App."""
 
     def __init__(
-        self, *,
+        self,
+        *,
         executable: SomeSubstitutionsType,
         name: Optional[SomeSubstitutionsType] = None,
         alias: Optional[SomeSubstitutionsType] = None,
         arguments: Optional[Iterable[SomeSubstitutionsType]] = None,
         mission_file: Optional[SomeSubstitutionsType] = None,
-        global_config: Optional[List[Tuple[Text, SomeSubstitutionsType]]] = None,
-        config: Optional[List[Tuple[Text, SomeSubstitutionsType]]] = None,
+        global_config: Optional[List[Tuple[str, SomeSubstitutionsType]]] = None,
+        config: Optional[List[Tuple[str, SomeSubstitutionsType]]] = None,
         **kwargs
     ) -> None:
         """
@@ -61,14 +61,14 @@ class MOOSApp(ExecuteProcess):
         :param: global_config list of configuration lines for the app
         """
         cmd = [executable]
-        cmd += [LocalSubstitution("mission_file", description='MOOS App Mission File')]
+        cmd += [LocalSubstitution("mission_file", description="MOOS App Mission File")]
 
         if alias:
-            cmd += [LocalSubstitution("alias", description='MOOS App Alias')]
+            cmd += [LocalSubstitution("alias", description="MOOS App Alias")]
 
         cmd += arguments or []
 
-        kwargs['name'] = name
+        kwargs["name"] = name
         super().__init__(cmd=cmd, **kwargs)
 
         self.alias = alias
@@ -81,32 +81,33 @@ class MOOSApp(ExecuteProcess):
         self.__global_config = global_config
         self.__config = config
 
-        self.__expanded_parameter_arguments = None  # type: Optional[List[Tuple[Text, bool]]]
+        self.__expanded_parameter_arguments = (
+            None
+        )  # type: Optional[List[Tuple[Text, bool]]]
         self.__substitutions_performed = False
-
 
     @classmethod
     def parse(cls, entity: Entity, parser: Parser):
         """Parse node."""
         # See parse method of `ExecuteProcess`
-        _, kwargs = super().parse(entity, parser, ignore=['cmd'])
-        args = entity.get_attr('args', optional=True)
+        _, kwargs = super().parse(entity, parser, ignore=["cmd"])
+        args = entity.get_attr("args", optional=True)
         if args is not None:
-            kwargs['arguments'] = super()._parse_cmdline(args, parser)
+            kwargs["arguments"] = super()._parse_cmdline(args, parser)
 
-        alias = entity.get_attr('alias', optional=True)
+        alias = entity.get_attr("alias", optional=True)
         if alias is not None:
-            kwargs['alias'] = parser.parse_substitution(alias)
+            kwargs["alias"] = parser.parse_substitution(alias)
 
-        node_name = entity.get_attr('name', optional=True)
+        node_name = entity.get_attr("name", optional=True)
         if node_name is not None:
-            kwargs['name'] = parser.parse_substitution(node_name)
+            kwargs["name"] = parser.parse_substitution(node_name)
 
-        executable = entity.get_attr('executable', optional=True)
+        executable = entity.get_attr("executable", optional=True)
         if executable is not None:
-            kwargs['executable'] = parser.parse_substitution(executable)
+            kwargs["executable"] = parser.parse_substitution(executable)
 
-        kwargs['executable'] = parser.parse_substitution(entity.get_attr('exec'))
+        kwargs["executable"] = parser.parse_substitution(entity.get_attr("exec"))
 
         # parameters = entity.get_attr('param', data_type=List[Entity], optional=True)
         # if parameters is not None:
@@ -114,16 +115,25 @@ class MOOSApp(ExecuteProcess):
 
         return cls, kwargs
 
-
     @staticmethod
-    def Create_moos_file(process_name: str,
-                         config: List[Tuple[Text, Text]],
-                         global_config: List[Tuple[Text, Text]] = None) -> str:
-        with NamedTemporaryFile(mode='w', prefix='launch_moos_', suffix=".moos", delete=False) as h:
+    def Create_moos_file(
+        process_name: str,
+        config: List[Tuple[str, str]],
+        global_config: List[Tuple[str, str]] = None,
+    ) -> str:
+        with NamedTemporaryFile(
+            mode="w", prefix="launch_moos_", suffix=".moos", delete=False
+        ) as h:
             param_file_path = h.name
-            h.write(evaluate_template({'process_name': process_name,
-                                       'global_variables': global_config or [],
-                                       'process_variables': config or []}))
+            h.write(
+                evaluate_template(
+                    {
+                        "process_name": process_name,
+                        "global_variables": global_config or [],
+                        "process_variables": config or [],
+                    }
+                )
+            )
             return param_file_path
 
     def _perform_substitutions(self, context: LaunchContext) -> None:
@@ -141,7 +151,7 @@ class MOOSApp(ExecuteProcess):
         # so they can be overridden with specific parameters of this Node
         # The params_container list is expected to contain name-value pairs (tuples)
         # and/or strings representing paths to parameter files.
-        params_container = context.launch_configurations.get('global_params', None)
+        params_container = context.launch_configurations.get("global_params", None)
 
         # if any(x is not None for x in (params_container, self.__parameters)):
         #     self.__expanded_parameter_arguments = []
@@ -200,11 +210,11 @@ class MOOSApp(ExecuteProcess):
 
         if self.mission_file is None:
             # then we need to generate the moos file
-            self.mission_file = MOOSApp.Create_moos_file(self.__app_executable, self.__config, self.__global_config)
+            self.mission_file = MOOSApp.Create_moos_file(
+                self.__app_executable, self.__config, self.__global_config
+            )
 
-        context.extend_locals(
-            {'alias': self.alias,
-             'mission_file': self.mission_file})
+        context.extend_locals({"alias": self.alias, "mission_file": self.mission_file})
 
         ret = super().execute(context)
 

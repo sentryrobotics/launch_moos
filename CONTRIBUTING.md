@@ -108,4 +108,3 @@ It is recommended to open an issue before starting work on anything.
 This will allow a chance to talk it over with the owners and validate your approach.
 
 [pull request]: https://github.com/russkel/launch_moos/pulls
-

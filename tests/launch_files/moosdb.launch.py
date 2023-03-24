@@ -4,17 +4,21 @@ import os
 import platform
 import sys
 from typing import cast
-# sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))  # noqa
 
 import launch  # noqa: E402
-from launch import LaunchDescription  # noqa: E402
-from launch import LaunchIntrospector  # noqa: E402
-from launch import LaunchService  # noqa: E402
 import launch.actions  # noqa: E402
 import launch.events  # noqa: E402
 import launch.substitutions  # noqa: E402
+from launch import LaunchDescription  # noqa: E402
+from launch import LaunchIntrospector  # noqa: E402
+from launch import LaunchService  # noqa: E402
 
-from launch_moos.actions import IncludeMOOSMission, MOOSApp
+from launch_moos.actions import IncludeMOOSMission
+from launch_moos.actions import MOOSApp
+
+
+# sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))  # noqa
+
 
 def main(argv=sys.argv[1:]):
     """Run Counter via launch."""
@@ -23,39 +27,36 @@ def main(argv=sys.argv[1:]):
     #     lambda path, encoding=None: launch.logging.handlers.RotatingFileHandler(
     #         path, maxBytes=1024, backupCount=3, encoding=encoding)
 
-
-
     # moos_file = IncludeMOOSMission("alpha.moos")
 
     moos_globals = [
-                              ("ServerHost", "localhost"),
-                              ("ServerPort", 9000),
-                              ("Community", "alpha"),
-                              ("MOOSTimeWarp", 1),
-                              ("LatOrigin", 43.825300),
-                              ("LongOrigin", -70.330400),
-                          ]
+        ("ServerHost", "localhost"),
+        ("ServerPort", 9000),
+        ("Community", "alpha"),
+        ("MOOSTimeWarp", 1),
+        ("LatOrigin", 43.825300),
+        ("LongOrigin", -70.330400),
+    ]
 
-    moosdb_app = MOOSApp(executable="MOOSDB",
-                         name="MOOSDB",
-                         global_config=moos_globals,
-                         output='screen')
+    moosdb_app = MOOSApp(
+        executable="MOOSDB", name="MOOSDB", global_config=moos_globals, output="screen"
+    )
 
-    helmivp_app = MOOSApp(executable="pHelmIvP",
-                          alias="pHelmIvP",
-                          global_config=moos_globals,
-                          config=[
-                              ("AppTick", 4),
-                              ("CommsTick", 4),
-                              ("behaviors", "alpha.bhv"),
-                              ("domain", "course:0:359:360"),
-                              ("domain", "speed:0:4:41"),
-                          ],
-                          output='screen')
+    helmivp_app = MOOSApp(
+        executable="pHelmIvP",
+        alias="pHelmIvP",
+        global_config=moos_globals,
+        config=[
+            ("AppTick", 4),
+            ("CommsTick", 4),
+            ("behaviors", "alpha.bhv"),
+            ("domain", "course:0:359:360"),
+            ("domain", "speed:0:4:41"),
+        ],
+        output="screen",
+    )
 
-    ld = LaunchDescription([
-        moosdb_app, helmivp_app
-    ])
+    ld = LaunchDescription([moosdb_app, helmivp_app])
 
     # # Unset launch prefix to prevent other process from getting this setting.
     # ld.add_action(launch.actions.SetLaunchConfiguration('launch-prefix', ''))
@@ -94,14 +95,14 @@ def main(argv=sys.argv[1:]):
     #     ])],
     # )))
 
-    print('Starting introspection of launch description...')
-    print('')
+    print("Starting introspection of launch description...")
+    print("")
 
     print(LaunchIntrospector().format_launch_description(ld))
 
-    print('')
-    print('Starting launch of launch description...')
-    print('')
+    print("")
+    print("Starting launch of launch description...")
+    print("")
 
     # ls = LaunchService(argv=argv, debug=True)  # Use this instead to get more debug messages.
     ls = LaunchService(argv=argv)
@@ -109,5 +110,5 @@ def main(argv=sys.argv[1:]):
     return ls.run()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())
