@@ -25,10 +25,10 @@
 
 ## Installation
 
-You can install _launch.moos_ via [pip] from [PyPI]:
+You can install _launch.moos_ using [pip]:
 
 ```console
-$ pip install launch_moos
+$ pip install 'launch_moos @ git+https://github.com/russkel/launch_moos.git'
 ```
 
 ## Usage
