@@ -1,0 +1,14 @@
+{
+  "_output_dir": "/home/russ/Devel",
+  "_template": "gh:cjolowicz/cookiecutter-hypermodern-python",
+  "author": "Russ Webber",
+  "copyright_year": "2022",
+  "development_status": "Development Status :: 1 - Planning",
+  "email": "russ@rw.id.au",
+  "friendly_name": "launch.moos",
+  "github_user": "russkel",
+  "license": "MIT",
+  "package_name": "launch_moos",
+  "project_name": "launch_moos",
+  "version": "0.0.0"
+}
