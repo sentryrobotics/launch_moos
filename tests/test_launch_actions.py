@@ -11,7 +11,7 @@ from launch_moos import MOOSMissionFileDescriptionSource
 from launch_moos.actions.moosapp import MOOSApp
 
 
-def test_moosapp_args():
+def test_moosapp_args() -> None:
     lc = LaunchContext()
     lc._set_asyncio_loop(asyncio.get_event_loop())
 
@@ -23,7 +23,7 @@ def test_moosapp_args():
     assert moosdb_app.process_details["cmd"] == ["echo", "the_moos_file.moos"]
 
 
-def test_moosapp_args_2():
+def test_moosapp_args_2() -> None:
     lc = LaunchContext()
     lc._set_asyncio_loop(asyncio.get_event_loop())
 
@@ -38,7 +38,7 @@ def test_moosapp_args_2():
     assert moos_app.process_details["cmd"] == ["echo", "the_moos_file.moos", "pHelmIvP"]
 
 
-def test_moosapp_generate_mission_file():
+def test_moosapp_generate_mission_file() -> None:
     lc = LaunchContext()
     lc._set_asyncio_loop(asyncio.get_event_loop())
 
@@ -88,5 +88,5 @@ ProcessConfig = pHelmIvP
     )
 
 
-def test_include_mission_file():
+def test_include_mission_file() -> None:
     desc = MOOSMissionFileDescriptionSource("alpha.moos")
